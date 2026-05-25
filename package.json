@@ -1,0 +1,18 @@
+{
+  "name": "mini-ci-demo",
+  "version": "1.0.0",
+  "description": "GitHub Actions CI demo project",
+  "main": "src/calculator.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "lint": "eslint src/",
+    "start": "node src/calculator.js"
+  },
+  "keywords": ["github-actions", "ci", "demo"],
+  "author": "Abdulraheem",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0"
+  }
+}
