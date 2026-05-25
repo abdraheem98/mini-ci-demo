@@ -9,11 +9,11 @@ A demo project for learning GitHub Actions.
 - GitHub Actions CI pipeline
 
 ## Local Development
-\`\`\`bash
-npm install
-npm run lint
-npm test
-\`\`\`
+
+- npm install
+- npm run lint
+- npm test
+
 
 ## CI Pipeline
 The CI runs automatically on every push and pull request. It:
