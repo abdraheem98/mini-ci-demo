@@ -8,6 +8,10 @@ A demo project for learning GitHub Actions.
 - ESLint for code quality
 - GitHub Actions CI pipeline
 
+#Local setup
+- npm init -y
+- npm install --save-dev jest eslint
+
 ## Local Development
 
 - npm install
