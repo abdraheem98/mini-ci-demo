@@ -1,0 +1,76 @@
+name: CI Pipeline
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true 
+
+jobs:
+  Lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Set up Node Js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run linter
+        run: npm run lint
+  test:
+    name: Test on node ${{ matrix.node-version }}
+    needs: Lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false #Don't cancel other matrix jobs if one fails
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Set up Node Js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Upload coverage report
+        if: always() # Upload even if tests fail
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-${{ matrix.node-version }}
+          path: coverage/
+          retention-days: 5
+  build:
+    name: Build and Publish ${{ matrix.node-version }}
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false #Don't cancel other matrix jobs if one fails
+      matrix:
+        node-version: [18, 20, 22]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Set up Node Js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build project
+        run: npm run build
