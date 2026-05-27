@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "lint": "eslint src/",
+    "build": "echo 'Building the project...' && mkdir -p dist && cp src/calculator.js dist/ && echo 'Build complete!'", 
     "start": "node src/calculator.js"
   },
   "keywords": ["github-actions", "ci", "demo"],
